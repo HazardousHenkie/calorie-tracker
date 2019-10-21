@@ -27,7 +27,7 @@ class Firebase {
   app: firebase.app.App
   auth: firebase.auth.Auth
 
-  googleProvider: app.auth.GoogleAuthProvider
+  googleProvider: firebase.auth.GoogleAuthProvider
 
   // private db: object
   // private storage: object
@@ -42,7 +42,7 @@ class Firebase {
     this.db = app.database()
     this.storage = app.storage()
     this.app = app
-    this.googleProvider = new app.auth.GoogleAuthProvider()
+    this.googleProvider = new firebase.auth.GoogleAuthProvider()
   }
 
   doSignInWithGoogle = (): Promise<firebase.auth.UserCredential> =>

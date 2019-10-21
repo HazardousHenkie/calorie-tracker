@@ -1,4 +1,4 @@
-import app from 'firebase/app'
+import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/storage'
@@ -24,8 +24,19 @@ const devConfig = {
 const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig
 
 class Firebase {
+  app: firebase.app.App
+  auth: firebase.auth.Auth
+
+  googleProvider: app.auth.GoogleAuthProvider
+
+  // private db: object
+  // private storage: object
+  // private app: object
+  // private googleProvider: object
+
   constructor() {
-    app.initializeApp(config)
+    this.app = firebase.initializeApp(config)
+    this.auth = firebase.auth(this.app)
 
     this.auth = app.auth()
     this.db = app.database()
@@ -34,7 +45,8 @@ class Firebase {
     this.googleProvider = new app.auth.GoogleAuthProvider()
   }
 
-  doSignInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider)
+  doSignInWithGoogle = (): Promise<firebase.auth.UserCredential> =>
+    this.auth.signInWithPopup(this.googleProvider)
 
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password)

@@ -1,12 +1,6 @@
 import React from 'react'
 
-export interface FirebaseContextInterface {
-  value: object
-}
-
-const FirebaseContext = React.createContext<FirebaseContextInterface | null>(
-  null
-)
+const FirebaseContext = React.createContext({})
 
 export const withFirebase = <Props extends object>(
   Component: React.ComponentType<Props>

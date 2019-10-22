@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 
 import { addUser } from '../../Redux/Actions'
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 export interface FirebaseInterface {
-  firebase: Record<string, object>
+  firebase: Firebase
 }
 
 export const SignOutButton: React.FC<FirebaseInterface> = ({ firebase }) => {
@@ -27,7 +27,7 @@ export const SignOutButton: React.FC<FirebaseInterface> = ({ firebase }) => {
   const { setSnackbarState } = useContext(SnackbarContext)
   const classes = useStyles()
 
-  const handleClick = event => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault()
 
     firebase.doSignOut().then(

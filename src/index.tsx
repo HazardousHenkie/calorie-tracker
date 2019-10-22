@@ -9,18 +9,11 @@ import * as serviceWorker from './serviceWorker'
 import { Router } from 'react-router-dom'
 import history from './Helpers/History'
 
-import Firebase, {
-  FirebaseContext,
-  FirebaseContextInterface
-} from './components/Firebase'
-
-const FirebaseContextInterfaceLocal: FirebaseContextInterface = {
-  value: new Firebase()
-}
+import Firebase, { FirebaseContext } from './components/Firebase'
 
 ReactDOM.render(
   <Router history={history}>
-    <FirebaseContext.Provider value={FirebaseContextInterfaceLocal}>
+    <FirebaseContext.Provider value={new Firebase()}>
       <App />
     </FirebaseContext.Provider>
   </Router>,

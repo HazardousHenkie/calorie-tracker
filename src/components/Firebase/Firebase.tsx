@@ -57,12 +57,10 @@ class Firebase {
   doPasswordReset = (email: string): Promise<void> =>
     this.auth.sendPasswordResetEmail(email)
 
-  doPasswordUpdate = (password: string): Promise<void> | void => {
-    if (this.auth) {
-      this.auth!.currentUser.updatePassword(password)
-    }
-  }
-  // this.auth.currentUser.updatePassword(password)
+  doPasswordUpdate = (password: string): Promise<void> =>
+    this.auth.currentUser
+      ? this.auth.currentUser.updatePassword(password)
+      : Promise.resolve()
 
   doSignOut = (): Promise<void> => this.auth.signOut()
 

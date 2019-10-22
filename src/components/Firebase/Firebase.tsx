@@ -26,53 +26,61 @@ const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig
 class Firebase {
   app: firebase.app.App
   auth: firebase.auth.Auth
-
+  db: firebase.database.Database
+  storage: firebase.storage.Storage
   googleProvider: firebase.auth.GoogleAuthProvider
-
-  // private db: object
-  // private storage: object
-  // private app: object
-  // private googleProvider: object
 
   constructor() {
     this.app = firebase.initializeApp(config)
-    this.auth = firebase.auth(this.app)
+    this.auth = firebase.auth()
+    this.db = firebase.database()
+    this.storage = firebase.storage()
 
-    this.auth = app.auth()
-    this.db = app.database()
-    this.storage = app.storage()
-    this.app = app
     this.googleProvider = new firebase.auth.GoogleAuthProvider()
   }
 
   doSignInWithGoogle = (): Promise<firebase.auth.UserCredential> =>
     this.auth.signInWithPopup(this.googleProvider)
 
-  doCreateUserWithEmailAndPassword = (email, password) =>
+  doCreateUserWithEmailAndPassword = (
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> =>
     this.auth.createUserWithEmailAndPassword(email, password)
 
-  doSignInWithEmailAndPassword = (email, password) =>
+  doSignInWithEmailAndPassword = (
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> =>
     this.auth.signInWithEmailAndPassword(email, password)
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email)
+  doPasswordReset = (email: string): Promise<void> =>
+    this.auth.sendPasswordResetEmail(email)
 
-  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password)
+  doPasswordUpdate = (password: string): Promise<void> | void => {
+    if (this.auth) {
+      this.auth!.currentUser.updatePassword(password)
+    }
+  }
+  // this.auth.currentUser.updatePassword(password)
 
-  doSignOut = () => this.auth.signOut()
+  doSignOut = (): Promise<void> => this.auth.signOut()
 
-  user = uid => this.db.ref(`users/${uid}`)
+  user = (uid?: string): firebase.database.Reference =>
+    this.db.ref(`users/${uid}`)
 
-  message = uid => this.db.ref(`messages/${uid}`)
+  message = (uid?: string): firebase.database.Reference =>
+    this.db.ref(`messages/${uid}`)
 
-  messages = () => this.db.ref('messages')
+  messages = (): firebase.database.Reference => this.db.ref('messages')
 
-  locations = () => this.db.ref('locations')
+  locations = (): firebase.database.Reference => this.db.ref('locations')
 
-  imagesUser = () => this.db.ref('images_user')
+  imagesUser = (): firebase.database.Reference => this.db.ref('images_user')
 
-  getStorage = () => this.storage.ref()
+  getStorage = (): firebase.storage.Reference => this.storage.ref()
 
-  firebase = () => this.app
+  firebase = (): firebase.app.App => this.app
 }
 
 export default Firebase

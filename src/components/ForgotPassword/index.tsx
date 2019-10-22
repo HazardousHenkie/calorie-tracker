@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ForgotPassword = ({ firebase }) => {
+const ForgotPassword: React.FC = ({ firebase }) => {
   const { setSnackbarState } = useContext(SnackbarContext)
   const classes = useStyles()
 
@@ -60,7 +60,7 @@ const ForgotPassword = ({ firebase }) => {
             message: 'Password reset e-mail has been send',
             variant: 'success'
           })
-          history.push(routes.memo)
+          history.push(routes.home)
         }}
       >
         {({ isSubmitting, isValid }) => (

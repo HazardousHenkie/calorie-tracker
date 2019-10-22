@@ -63,7 +63,7 @@ const SignUpForm = ({ firebase }) => {
 
           firebase
             .doSignInWithEmailAndPassword(email, password)
-            .then(async signInResult => {
+            .then(async (signInResult: Record<string, object>) => {
               if (signInResult.additionalUserInfo.isNewUser) {
                 firebase.user(signInResult.user.uid).set({
                   username: signInResult.user.email,

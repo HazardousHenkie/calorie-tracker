@@ -10,11 +10,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import SnackbarContext from './Context'
 
-const variantIcon = {
-  success: CheckCircleIcon,
-  error: ErrorIcon
-}
-
 const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[600]
@@ -35,23 +30,31 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const CustomSnackbar = () => {
+const CustomSnackbar: React.FC = () => {
   const classes = useStyles()
   const { snackbarState, setSnackbarState } = useContext(SnackbarContext)
-  const Icon = variantIcon[snackbarState.variant]
+
+  let Icon
+  let iconClass
+
+  if (snackbarState.variant === 'success') {
+    Icon = (
+      <CheckCircleIcon className={clsx(classes.icon, classes.iconVariant)} />
+    )
+    iconClass = classes.success
+  } else if (snackbarState.variant === 'error') {
+    Icon = <ErrorIcon className={clsx(classes.icon, classes.iconVariant)} />
+    iconClass = classes.error
+  }
 
   const message = (
     <span id="client-snackbar" className={classes.message}>
-      <Icon className={clsx(classes.icon, classes.iconVariant)} />
+      {Icon}
       {snackbarState.message}
     </span>
   )
 
-  function handleClose(event, reason) {
-    if (reason === 'clickaway') {
-      return
-    }
-
+  const handleClose = (): void => {
     setSnackbarState({ message: '', variant: '' })
   }
 
@@ -66,7 +69,7 @@ const CustomSnackbar = () => {
       onClose={handleClose}
     >
       <SnackbarContent
-        className={clsx(classes[snackbarState.variant], classes.margin)}
+        className={iconClass}
         message={message}
         action={[
           <IconButton

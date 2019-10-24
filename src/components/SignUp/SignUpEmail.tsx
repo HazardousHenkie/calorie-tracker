@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import { addUser } from '../../Redux/Actions'
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 
 import SnackbarContext from '../Snackbar/Context'
 
@@ -44,7 +44,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignUpForm = ({ firebase }) => {
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+export const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
   const { setSnackbarState } = useContext(SnackbarContext)
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -62,35 +66,38 @@ const SignUpForm = ({ firebase }) => {
           passwordConfirmation: ''
         }}
         validationSchema={SignupScheme}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting }): void => {
           const { username, email, password } = values
 
-          const emailAuthUser = await firebase
+          firebase
             .doCreateUserWithEmailAndPassword(email, password)
-            .catch(error => {
+            .then(async emailAuthUser => {
+              if (emailAuthUser.user && emailAuthUser.user.uid) {
+                await firebase.user(emailAuthUser.user.uid).set({
+                  username,
+                  email: emailAuthUser.user.email
+                })
+
+                dispatch(
+                  addUser({
+                    loggedIn: true,
+                    userName: username,
+                    userId: emailAuthUser.user.uid
+                  })
+                )
+              }
+
+              setSubmitting(false)
+              setSnackbarState({ message: 'Logged in!', variant: 'success' })
+              history.push(routes.home)
+            })
+            .catch((error: Record<string, string>) => {
               setSubmitting(false)
               setSnackbarState({ message: error.message, variant: 'error' })
             })
-
-          await firebase.user(emailAuthUser.user.uid).set({
-            username,
-            email: emailAuthUser.user.email
-          })
-
-          dispatch(
-            addUser({
-              loggedIn: true,
-              userName: username,
-              userId: emailAuthUser.user.uid
-            })
-          )
-
-          setSubmitting(false)
-          setSnackbarState({ message: 'Logged in!', variant: 'success' })
-          history.push(routes.home)
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting }): React.ReactNode => (
           <Form>
             <Field
               type="text"

@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { addUser } from '../../Redux/Actions'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 import SnackbarContext from '../Snackbar/Context'
 
 const styles = theme => ({
@@ -59,26 +59,38 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions)
 
-const CustomizedDialogs = ({ firebase }) => {
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
+  firebase
+}) => {
   const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
-  const { userId } = useSelector(state => state.user)
+  const { userId } = useSelector((state: Record<string, string>) => state.user)
   const { setSnackbarState } = useContext(SnackbarContext)
 
-  const HandleClickOpen = () => {
+  const HandleClickOpen = (): void => {
     setOpen(true)
   }
 
-  const HandleClose = () => {
+  const HandleClose = (): void => {
     setOpen(false)
   }
 
-  const HandleDelete = () => {
-    const lastLogin = moment(firebase.auth.currentUser.metadata.lastSignInTime)
+  const HandleDelete = (): void => {
+    let lastLogin
 
+    if (
+      firebase.auth.currentUser &&
+      firebase.auth.currentUser.metadata.lastSignInTime
+    ) {
+      lastLogin = moment(firebase.auth.currentUser.metadata.lastSignInTime)
+    }
     const currentDateMinusOneWeek = moment().subtract(1, 'minutes')
 
-    if (lastLogin.isBefore(currentDateMinusOneWeek)) {
+    if (lastLogin && lastLogin.isBefore(currentDateMinusOneWeek)) {
       setSnackbarState({
         message: 'To remove your account you to logout and login again.',
         variant: 'error'
@@ -90,15 +102,17 @@ const CustomizedDialogs = ({ firebase }) => {
         .once('value')
         .then(async snapshot => {
           if (snapshot.exists()) {
-            const promises = []
+            const promises: Array<Promise<void>> = []
 
             snapshot.forEach(element => {
               if (element.val().downloadURL) {
-                firebase
-                  .firebase()
-                  .storage()
-                  .refFromURL(element.val().downloadURL)
-                  .delete()
+                promises.push(
+                  firebase
+                    .firebase()
+                    .storage()
+                    .refFromURL(element.val().downloadURL)
+                    .delete()
+                )
               }
             })
 
@@ -115,7 +129,7 @@ const CustomizedDialogs = ({ firebase }) => {
         })
 
       firebase
-        .messages(userId)
+        .messages()
         .orderByChild('userId')
         .equalTo(userId)
         .once('value')
@@ -148,18 +162,20 @@ const CustomizedDialogs = ({ firebase }) => {
           setSnackbarState({ message: removeError.message, variant: 'error' })
         })
 
-      firebase.auth.currentUser
-        .delete()
-        .then(() => {
-          dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
-          setSnackbarState({
-            message: 'Account was deleted!',
-            variant: 'error'
+      if (firebase.auth.currentUser) {
+        firebase.auth.currentUser
+          .delete()
+          .then(() => {
+            dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
+            setSnackbarState({
+              message: 'Account was deleted!',
+              variant: 'error'
+            })
           })
-        })
-        .catch(removeError => {
-          setSnackbarState({ message: removeError.message, variant: 'error' })
-        })
+          .catch(removeError => {
+            setSnackbarState({ message: removeError.message, variant: 'error' })
+          })
+      }
     }
   }
 

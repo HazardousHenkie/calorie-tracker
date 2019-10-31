@@ -6,12 +6,19 @@ import { addUser } from '../../Redux/Actions'
 
 import { withFirebase } from '../Firebase'
 
+interface ReduxProvider {
+  userId: number
+  loggedIn: boolean
+}
+
 const withAuthentication = Component => {
   function WithAuthentication(props) {
     const { firebase } = props
     const dispatch = useDispatch()
     const [authenticated, setAuthenticated] = useState(false)
-    const { userId, loggedIn } = useSelector(state => state.user)
+    const { userId, loggedIn } = useSelector(
+      (state: Record<string, ReduxProvider>) => state.user
+    )
 
     useEffect(() => {
       const listener = firebase.auth.onAuthStateChanged(authUser => {

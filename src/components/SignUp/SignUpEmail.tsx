@@ -149,7 +149,6 @@ export const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
               variant="contained"
               color="secondary"
               disabled={isSubmitting}
-              className={classes.button}
             >
               <Email className={classes.leftIcon} />
               Sign Up

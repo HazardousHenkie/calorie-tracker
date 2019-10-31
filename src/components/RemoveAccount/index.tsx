@@ -68,7 +68,7 @@ export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
 }) => {
   const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
-  const { userId } = useSelector((state: Record<string, string>) => state.user)
+  const { userId } = useSelector((state: Record<string, object>) => state.user)
   const { setSnackbarState } = useContext(SnackbarContext)
 
   const HandleClickOpen = (): void => {

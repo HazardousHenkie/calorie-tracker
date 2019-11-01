@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, Theme, makeStyles } from '@material-ui/core/styles'
+
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
@@ -15,7 +16,7 @@ import { addUser } from '../../Redux/Actions'
 import Firebase, { withFirebase } from '../Firebase'
 import SnackbarContext from '../Snackbar/Context'
 
-const styles = theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2)
@@ -26,25 +27,7 @@ const styles = theme => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500]
   }
-})
-
-const DialogTitle = withStyles(styles)(props => {
-  const { children, classes, onClose } = props
-  return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  )
-})
+}))
 
 const DialogContent = withStyles(theme => ({
   root: {
@@ -63,13 +46,20 @@ export interface FirebaseInterface {
   firebase: Firebase
 }
 
+interface ReduxProvider {
+  userId: string
+}
+
 export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
   firebase
 }) => {
   const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
-  const { userId } = useSelector((state: Record<string, object>) => state.user)
+  const { userId } = useSelector(
+    (state: Record<string, ReduxProvider>) => state.user
+  )
   const { setSnackbarState } = useContext(SnackbarContext)
+  const classes = useStyles()
 
   const HandleClickOpen = (): void => {
     setOpen(true)
@@ -195,9 +185,18 @@ export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
         aria-labelledby="delete account"
         open={open}
       >
-        <DialogTitle id="delete-account" onClose={HandleClose}>
-          Remove Account
-        </DialogTitle>
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6"> Remove Account</Typography>
+
+          <IconButton
+            aria-label="close"
+            className={classes.closeButton}
+            onClick={HandleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </MuiDialogTitle>
+
         <DialogContent dividers>
           <Typography gutterBottom>
             Are you sure you want to delete your account and all your data?

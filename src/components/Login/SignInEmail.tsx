@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography'
 import { addUser } from '../../Redux/Actions'
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 
 import SnackbarContext from '../Snackbar/Context'
 
@@ -44,7 +44,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignUpForm = ({ firebase }) => {
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
   const { setSnackbarState } = useContext(SnackbarContext)
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -63,8 +67,12 @@ const SignUpForm = ({ firebase }) => {
 
           firebase
             .doSignInWithEmailAndPassword(email, password)
-            .then(async (signInResult: Record<string, object>) => {
-              if (signInResult.additionalUserInfo.isNewUser) {
+            .then(async signInResult => {
+              if (
+                signInResult.user &&
+                signInResult.additionalUserInfo &&
+                signInResult.additionalUserInfo.isNewUser
+              ) {
                 firebase.user(signInResult.user.uid).set({
                   username: signInResult.user.email,
                   email: signInResult.user.email
@@ -78,26 +86,28 @@ const SignUpForm = ({ firebase }) => {
                   })
                 )
               } else {
-                firebase
-                  .user(signInResult.user.uid)
-                  .once('value')
-                  .then(async snapshot => {
-                    dispatch(
-                      addUser({
-                        loggedIn: true,
-                        userName: snapshot.val().username,
-                        userDescription:
-                          snapshot.val().description !== null
-                            ? snapshot.val().description
-                            : '',
-                        countries:
-                          snapshot.val().countries !== undefined
-                            ? snapshot.val().countries
-                            : null,
-                        userId: signInResult.user.uid
-                      })
-                    )
-                  })
+                if (signInResult.user) {
+                  firebase
+                    .user(signInResult.user.uid)
+                    .once('value')
+                    .then(async snapshot => {
+                      dispatch(
+                        addUser({
+                          loggedIn: true,
+                          userName: snapshot.val().username,
+                          userDescription:
+                            snapshot.val().description !== null
+                              ? snapshot.val().description
+                              : '',
+                          countries:
+                            snapshot.val().countries !== undefined
+                              ? snapshot.val().countries
+                              : null,
+                          userId: signInResult.user ? signInResult.user.uid : ''
+                        })
+                      )
+                    })
+                }
               }
 
               setSubmitting(false)
@@ -148,7 +158,6 @@ const SignUpForm = ({ firebase }) => {
               variant="contained"
               color="secondary"
               disabled={isSubmitting || !isValid}
-              className={classes.button}
             >
               <Email className={classes.leftIcon} />
               Sign In

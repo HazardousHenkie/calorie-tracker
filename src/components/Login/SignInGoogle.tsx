@@ -8,7 +8,7 @@ import * as routes from '../../constants/routes'
 import { addUser } from '../../Redux/Actions'
 
 import history from '../../Helpers/History'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 import SnackbarContext from '../Snackbar/Context'
 
 import './SignInGoogle.scss'
@@ -22,17 +22,25 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignInGoogle = ({ firebase }) => {
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
   const classes = useStyles()
   const { setSnackbarState } = useContext(SnackbarContext)
   const dispatch = useDispatch()
-  const onSubmit = async event => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     firebase
       .doSignInWithGoogle()
       .then(signInResult => {
-        if (signInResult.additionalUserInfo.isNewUser) {
+        if (
+          signInResult.user &&
+          signInResult.additionalUserInfo &&
+          signInResult.additionalUserInfo.isNewUser
+        ) {
           firebase.user(signInResult.user.uid).set({
             username: signInResult.user.displayName,
             email: signInResult.user.email
@@ -46,23 +54,25 @@ const SignInGoogle = ({ firebase }) => {
             })
           )
         } else {
-          firebase.user(signInResult.user.uid).once('value', snapshot => {
-            dispatch(
-              addUser({
-                loggedIn: true,
-                userName: snapshot.val().username,
-                userDescription:
-                  snapshot.val().description !== null
-                    ? snapshot.val().description
-                    : '',
-                countries:
-                  snapshot.val().countries !== undefined
-                    ? snapshot.val().countries
-                    : null,
-                userId: signInResult.user.uid
-              })
-            )
-          })
+          if (signInResult.user) {
+            firebase.user(signInResult.user.uid).once('value', snapshot => {
+              dispatch(
+                addUser({
+                  loggedIn: true,
+                  userName: snapshot.val().username,
+                  userDescription:
+                    snapshot.val().description !== null
+                      ? snapshot.val().description
+                      : '',
+                  countries:
+                    snapshot.val().countries !== undefined
+                      ? snapshot.val().countries
+                      : null,
+                  userId: signInResult.user ? signInResult.user.uid : ''
+                })
+              )
+            })
+          }
         }
 
         setSnackbarState({ message: 'Logged in!', variant: 'success' })

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { withStyles, Theme, makeStyles } from '@material-ui/core/styles'
@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { addUser } from '../../Redux/Actions'
 import Firebase, { withFirebase } from '../Firebase'
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -58,7 +58,7 @@ export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
   const { userId } = useSelector(
     (state: Record<string, ReduxProvider>) => state.user
   )
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()
 
   const HandleClickOpen = (): void => {

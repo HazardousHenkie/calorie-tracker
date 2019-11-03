@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -13,7 +13,7 @@ import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
 import Firebase, { withFirebase } from '../Firebase'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 const SignupScheme = Yup.object().shape({
   email: Yup.string()
@@ -40,7 +40,7 @@ export interface FirebaseInterface {
 }
 
 export const ForgotPassword: React.FC<FirebaseInterface> = ({ firebase }) => {
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()
 
   return (

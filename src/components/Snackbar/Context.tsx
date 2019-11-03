@@ -6,7 +6,7 @@ interface Snackbar {
 }
 
 interface SnackbarState {
-  snackbar: Snackbar
+  snackbarState: Snackbar
   setSnackbarState: React.Dispatch<React.SetStateAction<Snackbar>>
 }
 
@@ -16,7 +16,7 @@ const defaultSnackbar: Snackbar = {
 }
 
 const defaultSnackbarState: SnackbarState = {
-  snackbar: defaultSnackbar,
+  snackbarState: defaultSnackbar,
   setSnackbarState: (): void => {}
 }
 
@@ -24,20 +24,8 @@ export const SnackbarContext = createContext<SnackbarState>(
   defaultSnackbarState
 )
 
-export const useProfileContext = (): SnackbarState => {
+const useSnackbarContext = (): SnackbarState => {
   return useContext(SnackbarContext)
 }
 
-// export interface Snackbar {
-//   snackbarState: { message: string; variant: string }
-//   setSnackbarState: React.Dispatch<React.SetStateAction<Snackbar>>
-// }
-
-// const defaultSnackbar = {
-//   snackbarState: { message: '', variant: '' }
-//   // setSnackbarState: React.Dispatch<React.SetStateAction<Snackbar>>
-// }
-
-// const SnackbarContext = React.createContext(defaultSnackbar)
-
-// export default SnackbarContext
+export default useSnackbarContext

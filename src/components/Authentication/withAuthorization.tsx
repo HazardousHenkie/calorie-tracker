@@ -13,7 +13,7 @@ export interface FirebaseInterface {
 
 const withAuthorization = <Props extends object>(
   Component: React.ComponentType<Props>
-) =>
+): React.ComponentType<Props & FirebaseInterface> =>
   class WithAuthorization extends React.Component<Props & FirebaseInterface> {
     render(): React.ReactNode {
       const { firebase, ...props } = this.props
@@ -28,11 +28,13 @@ const withAuthorization = <Props extends object>(
           () => history.push(routes.home)
         )
 
-        return () => unsubscribe()
+        return (): void => {
+          unsubscribe()
+        }
       }, [firebase])
       return (
         <AuthUserContext.Consumer>
-          {authenticated =>
+          {(authenticated): React.ReactNode =>
             authenticated === true ? <Component {...(props as Props)} /> : ''
           }
         </AuthUserContext.Consumer>

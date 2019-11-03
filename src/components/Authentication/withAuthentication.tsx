@@ -17,8 +17,10 @@ export interface FirebaseInterface {
 
 const withAuthentication = <Props extends object>(
   Component: React.ComponentType<Props>
-) =>
+): React.ComponentType<Props & FirebaseInterface> =>
   class WithAuthentication extends React.Component<Props & FirebaseInterface> {
+    private listener: (() => void) | null = null
+
     render(): React.ReactNode {
       const { firebase, ...props } = this.props
       const dispatch = useDispatch()
@@ -54,11 +56,11 @@ const withAuthentication = <Props extends object>(
           } else {
             dispatch(
               addUser({
-                loggedin: false,
+                loggedIn: false,
                 userName: '',
                 userDescription: '',
                 userId: '',
-                countries: null
+                countries: []
               })
             )
 
@@ -66,7 +68,9 @@ const withAuthentication = <Props extends object>(
           }
         })
 
-        return () => listener()
+        return (): void => {
+          listener()
+        }
       }, [setAuthenticated, firebase, dispatch, loggedIn, userId])
       return (
         <AuthUserContext.Provider value={authenticated}>

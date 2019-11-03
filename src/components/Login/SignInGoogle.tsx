@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import Button from '@material-ui/core/Button'
@@ -9,7 +9,7 @@ import { addUser } from '../../Redux/Actions'
 
 import history from '../../Helpers/History'
 import Firebase, { withFirebase } from '../Firebase'
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 import './SignInGoogle.scss'
 
@@ -28,9 +28,11 @@ export interface FirebaseInterface {
 
 const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
   const classes = useStyles()
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault()
 
     firebase
@@ -49,7 +51,9 @@ const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
           dispatch(
             addUser({
               loggedIn: true,
-              userName: signInResult.user.displayName,
+              userName: signInResult.user.displayName
+                ? signInResult.user.displayName
+                : '',
               userId: signInResult.user.uid
             })
           )

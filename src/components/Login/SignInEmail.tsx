@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
 import Firebase, { withFirebase } from '../Firebase'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 import './SignInEmail.scss'
 
@@ -49,7 +49,7 @@ export interface FirebaseInterface {
 }
 
 const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
   const classes = useStyles()
 
@@ -62,7 +62,7 @@ const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={SignupScheme}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }): Promise<void> => {
           const { email, password } = values
 
           firebase
@@ -81,7 +81,9 @@ const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
                 dispatch(
                   addUser({
                     loggedIn: true,
-                    userName: signInResult.user.displayName,
+                    userName: signInResult.user.displayName
+                      ? signInResult.user.displayName
+                      : '',
                     userId: signInResult.user.uid
                   })
                 )
@@ -122,7 +124,7 @@ const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
             })
         }}
       >
-        {({ isSubmitting, isValid }) => (
+        {({ isSubmitting, isValid }): React.ReactNode => (
           <Form>
             <Field
               type="text"

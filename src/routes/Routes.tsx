@@ -9,8 +9,8 @@ const Routes: React.FC = () => {
   return (
     <div className="Routes">
       <Switch>
-        {/* <Route path={routes.home} exact component={Home} /> */}
-        {/* <Route component={Error} /> */}
+        <Route path={routes.home} exact component={Home} />
+        <Route component={Error} />
       </Switch>
     </div>
   )

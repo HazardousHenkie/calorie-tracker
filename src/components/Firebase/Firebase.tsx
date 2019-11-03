@@ -2,6 +2,7 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/storage'
+import 'firebase/firestore'
 
 const prodConfig = {
   apiKey: process.env.REACT_APP_PROD_API_KEY,
@@ -28,12 +29,14 @@ class Firebase {
   auth: firebase.auth.Auth
   db: firebase.database.Database
   storage: firebase.storage.Storage
+  firestore: firebase.firestore.Firestore
   googleProvider: firebase.auth.GoogleAuthProvider
 
   constructor() {
     this.app = firebase.initializeApp(config)
     this.auth = firebase.auth()
     this.db = firebase.database()
+    this.firestore = firebase.firestore()
     this.storage = firebase.storage()
 
     this.googleProvider = new firebase.auth.GoogleAuthProvider()

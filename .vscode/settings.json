@@ -30,5 +30,6 @@
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
-  "eslint.run": "onSave"
+  "eslint.run": "onSave",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

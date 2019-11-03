@@ -1,6 +1,20 @@
 import { ADD_USER, UPDATE_USER } from './ActionTypes'
 
-export const addUser = userInfo => ({
+interface UserInfoAddInterface {
+  loggedIn: boolean
+  userName: string
+  userId: string
+  userDescription?: string
+  countries?: never[]
+}
+
+interface UserInfoUpdateInterface {
+  userName: string
+  userDescription: string
+  countries: never[]
+}
+
+export const addUser = (userInfo: UserInfoAddInterface): object => ({
   type: ADD_USER,
   payload: {
     loggedIn: userInfo.loggedIn,
@@ -11,7 +25,7 @@ export const addUser = userInfo => ({
   }
 })
 
-export const updateUser = userInfo => ({
+export const updateUser = (userInfo: UserInfoUpdateInterface): object => ({
   type: UPDATE_USER,
   payload: {
     userName: userInfo.userName,

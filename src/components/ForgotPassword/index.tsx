@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -11,9 +11,9 @@ import Typography from '@material-ui/core/Typography'
 
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 const SignupScheme = Yup.object().shape({
   email: Yup.string()
@@ -35,8 +35,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ForgotPassword: React.FC = ({ firebase }) => {
-  const { setSnackbarState } = useContext(SnackbarContext)
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+export const ForgotPassword: React.FC<FirebaseInterface> = ({ firebase }) => {
+  const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()
 
   return (
@@ -47,23 +51,27 @@ const ForgotPassword: React.FC = ({ firebase }) => {
       <Formik
         initialValues={{ email: '' }}
         validationSchema={SignupScheme}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting }): void => {
           const { email } = values
 
-          await firebase.doPasswordReset(email).catch(error => {
-            setSubmitting(false)
-            setSnackbarState({ message: error.message, variant: 'error' })
-          })
+          firebase
+            .doPasswordReset(email)
+            .then(() => {
+              setSubmitting(false)
+              setSnackbarState({
+                message: 'Password reset e-mail has been send',
+                variant: 'success'
+              })
 
-          setSubmitting(false)
-          setSnackbarState({
-            message: 'Password reset e-mail has been send',
-            variant: 'success'
-          })
-          history.push(routes.home)
+              history.push(routes.home)
+            })
+            .catch(error => {
+              setSubmitting(false)
+              setSnackbarState({ message: error.message, variant: 'error' })
+            })
         }}
       >
-        {({ isSubmitting, isValid }) => (
+        {({ isSubmitting, isValid }): React.ReactNode => (
           <Form>
             <Field
               type="text"
@@ -82,7 +90,6 @@ const ForgotPassword: React.FC = ({ firebase }) => {
               variant="contained"
               color="secondary"
               disabled={isSubmitting || !isValid}
-              className={classes.button}
             >
               <Email className={classes.leftIcon} />
               Reset Password

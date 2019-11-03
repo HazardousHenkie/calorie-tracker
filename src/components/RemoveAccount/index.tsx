@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, Theme, makeStyles } from '@material-ui/core/styles'
+
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
@@ -12,10 +13,10 @@ import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { addUser } from '../../Redux/Actions'
-import { withFirebase } from '../Firebase'
-import SnackbarContext from '../Snackbar/Context'
+import Firebase, { withFirebase } from '../Firebase'
+import useSnackbarContext from '../Snackbar/Context'
 
-const styles = theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2)
@@ -26,25 +27,7 @@ const styles = theme => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500]
   }
-})
-
-const DialogTitle = withStyles(styles)(props => {
-  const { children, classes, onClose } = props
-  return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  )
-})
+}))
 
 const DialogContent = withStyles(theme => ({
   root: {
@@ -59,26 +42,45 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions)
 
-const CustomizedDialogs = ({ firebase }) => {
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+interface ReduxProvider {
+  userId: string
+}
+
+export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
+  firebase
+}) => {
   const dispatch = useDispatch()
   const [open, setOpen] = React.useState(false)
-  const { userId } = useSelector(state => state.user)
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { userId } = useSelector(
+    (state: Record<string, ReduxProvider>) => state.user
+  )
+  const { setSnackbarState } = useSnackbarContext()
+  const classes = useStyles()
 
-  const HandleClickOpen = () => {
+  const HandleClickOpen = (): void => {
     setOpen(true)
   }
 
-  const HandleClose = () => {
+  const HandleClose = (): void => {
     setOpen(false)
   }
 
-  const HandleDelete = () => {
-    const lastLogin = moment(firebase.auth.currentUser.metadata.lastSignInTime)
+  const HandleDelete = (): void => {
+    let lastLogin
 
+    if (
+      firebase.auth.currentUser &&
+      firebase.auth.currentUser.metadata.lastSignInTime
+    ) {
+      lastLogin = moment(firebase.auth.currentUser.metadata.lastSignInTime)
+    }
     const currentDateMinusOneWeek = moment().subtract(1, 'minutes')
 
-    if (lastLogin.isBefore(currentDateMinusOneWeek)) {
+    if (lastLogin && lastLogin.isBefore(currentDateMinusOneWeek)) {
       setSnackbarState({
         message: 'To remove your account you to logout and login again.',
         variant: 'error'
@@ -90,15 +92,17 @@ const CustomizedDialogs = ({ firebase }) => {
         .once('value')
         .then(async snapshot => {
           if (snapshot.exists()) {
-            const promises = []
+            const promises: Array<Promise<void>> = []
 
             snapshot.forEach(element => {
               if (element.val().downloadURL) {
-                firebase
-                  .firebase()
-                  .storage()
-                  .refFromURL(element.val().downloadURL)
-                  .delete()
+                promises.push(
+                  firebase
+                    .firebase()
+                    .storage()
+                    .refFromURL(element.val().downloadURL)
+                    .delete()
+                )
               }
             })
 
@@ -115,7 +119,7 @@ const CustomizedDialogs = ({ firebase }) => {
         })
 
       firebase
-        .messages(userId)
+        .messages()
         .orderByChild('userId')
         .equalTo(userId)
         .once('value')
@@ -148,18 +152,20 @@ const CustomizedDialogs = ({ firebase }) => {
           setSnackbarState({ message: removeError.message, variant: 'error' })
         })
 
-      firebase.auth.currentUser
-        .delete()
-        .then(() => {
-          dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
-          setSnackbarState({
-            message: 'Account was deleted!',
-            variant: 'error'
+      if (firebase.auth.currentUser) {
+        firebase.auth.currentUser
+          .delete()
+          .then(() => {
+            dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
+            setSnackbarState({
+              message: 'Account was deleted!',
+              variant: 'error'
+            })
           })
-        })
-        .catch(removeError => {
-          setSnackbarState({ message: removeError.message, variant: 'error' })
-        })
+          .catch(removeError => {
+            setSnackbarState({ message: removeError.message, variant: 'error' })
+          })
+      }
     }
   }
 
@@ -179,9 +185,18 @@ const CustomizedDialogs = ({ firebase }) => {
         aria-labelledby="delete account"
         open={open}
       >
-        <DialogTitle id="delete-account" onClose={HandleClose}>
-          Remove Account
-        </DialogTitle>
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6"> Remove Account</Typography>
+
+          <IconButton
+            aria-label="close"
+            className={classes.closeButton}
+            onClick={HandleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </MuiDialogTitle>
+
         <DialogContent dividers>
           <Typography gutterBottom>
             Are you sure you want to delete your account and all your data?

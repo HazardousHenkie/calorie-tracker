@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -15,9 +15,9 @@ import Typography from '@material-ui/core/Typography'
 import { addUser } from '../../Redux/Actions'
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
-import { withFirebase } from '../Firebase'
+import Firebase, { withFirebase } from '../Firebase'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 import './SignInEmail.scss'
 
@@ -44,8 +44,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignUpForm = ({ firebase }) => {
-  const { setSnackbarState } = useContext(SnackbarContext)
+export interface FirebaseInterface {
+  firebase: Firebase
+}
+
+const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
+  const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
   const classes = useStyles()
 
@@ -58,13 +62,17 @@ const SignUpForm = ({ firebase }) => {
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={SignupScheme}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }): Promise<void> => {
           const { email, password } = values
 
           firebase
             .doSignInWithEmailAndPassword(email, password)
-            .then(async (signInResult: Record<string, object>) => {
-              if (signInResult.additionalUserInfo.isNewUser) {
+            .then(async signInResult => {
+              if (
+                signInResult.user &&
+                signInResult.additionalUserInfo &&
+                signInResult.additionalUserInfo.isNewUser
+              ) {
                 firebase.user(signInResult.user.uid).set({
                   username: signInResult.user.email,
                   email: signInResult.user.email
@@ -73,31 +81,35 @@ const SignUpForm = ({ firebase }) => {
                 dispatch(
                   addUser({
                     loggedIn: true,
-                    userName: signInResult.user.displayName,
+                    userName: signInResult.user.displayName
+                      ? signInResult.user.displayName
+                      : '',
                     userId: signInResult.user.uid
                   })
                 )
               } else {
-                firebase
-                  .user(signInResult.user.uid)
-                  .once('value')
-                  .then(async snapshot => {
-                    dispatch(
-                      addUser({
-                        loggedIn: true,
-                        userName: snapshot.val().username,
-                        userDescription:
-                          snapshot.val().description !== null
-                            ? snapshot.val().description
-                            : '',
-                        countries:
-                          snapshot.val().countries !== undefined
-                            ? snapshot.val().countries
-                            : null,
-                        userId: signInResult.user.uid
-                      })
-                    )
-                  })
+                if (signInResult.user) {
+                  firebase
+                    .user(signInResult.user.uid)
+                    .once('value')
+                    .then(async snapshot => {
+                      dispatch(
+                        addUser({
+                          loggedIn: true,
+                          userName: snapshot.val().username,
+                          userDescription:
+                            snapshot.val().description !== null
+                              ? snapshot.val().description
+                              : '',
+                          countries:
+                            snapshot.val().countries !== undefined
+                              ? snapshot.val().countries
+                              : null,
+                          userId: signInResult.user ? signInResult.user.uid : ''
+                        })
+                      )
+                    })
+                }
               }
 
               setSubmitting(false)
@@ -112,7 +124,7 @@ const SignUpForm = ({ firebase }) => {
             })
         }}
       >
-        {({ isSubmitting, isValid }) => (
+        {({ isSubmitting, isValid }): React.ReactNode => (
           <Form>
             <Field
               type="text"
@@ -148,7 +160,6 @@ const SignUpForm = ({ firebase }) => {
               variant="contained"
               color="secondary"
               disabled={isSubmitting || !isValid}
-              className={classes.button}
             >
               <Email className={classes.leftIcon} />
               Sign In

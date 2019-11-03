@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { useDispatch } from 'react-redux'
 import Button from '@material-ui/core/Button'
@@ -10,7 +10,7 @@ import { addUser } from '../../Redux/Actions'
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -24,7 +24,7 @@ export interface FirebaseInterface {
 
 export const SignOutButton: React.FC<FirebaseInterface> = ({ firebase }) => {
   const dispatch = useDispatch()
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
@@ -32,7 +32,7 @@ export const SignOutButton: React.FC<FirebaseInterface> = ({ firebase }) => {
 
     firebase.doSignOut().then(
       () => {
-        dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
+        dispatch(addUser({ loggedIn: false, userName: '', userId: '' }))
         setSnackbarState({ message: 'Logged out', variant: 'error' })
         history.push(routes.home)
       },

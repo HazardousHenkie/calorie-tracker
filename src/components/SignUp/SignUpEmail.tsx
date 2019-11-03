@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -15,7 +15,7 @@ import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
 import Firebase, { withFirebase } from '../Firebase'
 
-import SnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../Snackbar/Context'
 
 const SignupScheme = Yup.object().shape({
   username: Yup.string().required('Required'),
@@ -49,7 +49,7 @@ export interface FirebaseInterface {
 }
 
 export const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
-  const { setSnackbarState } = useContext(SnackbarContext)
+  const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
   const classes = useStyles()
 
@@ -149,7 +149,6 @@ export const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
               variant="contained"
               color="secondary"
               disabled={isSubmitting}
-              className={classes.button}
             >
               <Email className={classes.leftIcon} />
               Sign Up

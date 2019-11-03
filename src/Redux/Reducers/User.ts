@@ -8,7 +8,29 @@ const initialState = {
   countries: []
 }
 
-export default (state = initialState, action) => {
+interface ActionInterface {
+  type: string
+  payload: {
+    loggedIn: boolean
+    userName: string
+    userId: string
+    userDescription: string
+    countries: never[]
+  }
+}
+
+interface PayloadExport {
+  loggedIn: boolean
+  userName: string
+  userId: string
+  userDescription: string
+  countries: never[]
+}
+
+export default (
+  state = initialState,
+  action: ActionInterface
+): PayloadExport => {
   switch (action.type) {
     case ADD_USER: {
       return {

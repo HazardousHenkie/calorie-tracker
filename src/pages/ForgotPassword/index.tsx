@@ -21,7 +21,7 @@ const ForgotPasswordPage: React.FC = () => {
         <div className="sign_up">
           <div className="sign_up__form">
             <Paper className={`${classes.root} center-content`}>
-              <ForgotPassword />
+              {/* <ForgotPassword /> */}
             </Paper>
           </div>
         </div>

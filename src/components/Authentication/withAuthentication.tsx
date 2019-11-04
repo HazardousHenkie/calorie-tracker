@@ -11,7 +11,7 @@ interface ReduxProvider {
   loggedIn: boolean
 }
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 

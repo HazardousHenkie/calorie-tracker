@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 
 import './error.scss'
 
-const Error = () => {
+const Error: React.FC = () => {
   return (
     <div className="error">
       <header className="error__header">

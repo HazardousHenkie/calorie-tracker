@@ -8,10 +8,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useSelector } from 'react-redux'
 import SignInGoogle from '../../components/Login/SignInGoogle'
 import SignInEmail from '../../components/Login/SignInEmail'
-
-import Locations from '../../components/Locations/Locations'
-import OtherLocations from '../../components/Locations/OtherLocations'
-
 import './Home.scss'
 
 const useStyles = makeStyles(theme => ({
@@ -20,9 +16,15 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Home = () => {
-  const loggedIn = useSelector(state => state.user.loggedIn)
-  const { userName } = useSelector(state => state.user)
+interface ReduxProvider {
+  userName: string
+  loggedIn: boolean
+}
+
+const Home: React.FC = () => {
+  const { userName, loggedIn } = useSelector(
+    (state: Record<string, ReduxProvider>) => state.user
+  )
   const classes = useStyles()
 
   return (
@@ -43,11 +45,6 @@ const Home = () => {
             </div>
           )}
         </div>
-      </Grid>
-      <Grid item xs={12}>
-        {loggedIn && <Locations />}
-
-        {loggedIn && <OtherLocations />}
       </Grid>
     </Grid>
   )

@@ -3,7 +3,8 @@ import { Switch, Route } from 'react-router-dom'
 
 import * as routes from '../constants/routes'
 
-// import Home from '../pages/Home'
+import Home from '../pages/Home'
+import Error from '../pages/error'
 
 const Routes: React.FC = () => {
   return (

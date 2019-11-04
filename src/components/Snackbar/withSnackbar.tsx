@@ -5,7 +5,7 @@ import CustomSnackbar from './Snackbar'
 
 import Firebase from '../Firebase'
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 

@@ -19,8 +19,6 @@ import Firebase, { withFirebase } from '../Firebase'
 
 import useSnackbarContext from '../Snackbar/Context'
 
-import './SignInEmail.scss'
-
 const SignupScheme = Yup.object().shape({
   email: Yup.string()
     .required('Required')
@@ -44,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 
@@ -74,7 +72,7 @@ const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
                 signInResult.additionalUserInfo.isNewUser
               ) {
                 firebase.user(signInResult.user.uid).set({
-                  username: signInResult.user.email,
+                  userName: signInResult.user.email,
                   email: signInResult.user.email
                 })
 

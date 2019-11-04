@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 

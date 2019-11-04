@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage: React.FC = () => {
   const classes = useStyles()
 
   return (

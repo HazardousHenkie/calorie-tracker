@@ -10,6 +10,8 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 
+import { WithAuthentication } from './components/Authentication'
+
 let theme = createMuiTheme({
   palette: {
     primary: {
@@ -37,4 +39,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default WithAuthentication(App)

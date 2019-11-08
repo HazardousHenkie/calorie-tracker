@@ -1,8 +1,6 @@
 import React from 'react'
 import Firebase from './Firebase'
 
-type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
-
 const FirebaseContext = React.createContext({})
 
 type FirebaseProviderProps = {
@@ -22,42 +20,20 @@ type WithFirebaseProps = {
   firebase: Firebase
 }
 
-// check displayname error
+// check if we can fix the annotation
 export const withFirebase = <P extends object>(
   Component: React.ComponentType<P>
-): React.FC<Omit<P, keyof WithFirebaseProps>> => props => (
-  <FirebaseContext.Consumer>
-    {(firebase): React.ReactNode => (
-      <Component {...(props as P)} firebase={firebase} />
-    )}
-  </FirebaseContext.Consumer>
-)
-
-// import { Subtract } from 'utility-types'
-// import Firebase from './Firebase'
-
-// const FirebaseContext = React.createContext({})
-
-// interface FirebaseProp {
-//   firebase: Firebase
-// }
-
-// // export const withFirebase = <Props extends FirebaseProp>(
-//   Component: React.ComponentType<Props>
-// ) =>
-//   class WithFirebase extends React.Component<
-//     Subtract<Props, FirebaseProp>,
-//     MakeCounterState
-//   >
-//     render(): React.ReactNode {
-//       return (
-//         <FirebaseContext.Consumer>
-//           {(firebase): React.ReactNode => (
-//             <Component {...(this.props as Props)} firebase={firebase} />
-//           )}
-//         </FirebaseContext.Consumer>
-//       )
-//     }
-//   }
+) =>
+  class WithFirebase extends React.Component<Omit<P, keyof WithFirebaseProps>> {
+    render(): React.ReactNode {
+      return (
+        <FirebaseContext.Consumer>
+          {(firebase): React.ReactNode => (
+            <Component {...(this.props as P)} firebase={firebase} />
+          )}
+        </FirebaseContext.Consumer>
+      )
+    }
+  }
 
 export default FirebaseContext

@@ -52,7 +52,7 @@ const LogOut: React.FC = () => {
               Are you sure you want to logout?
             </Typography>
 
-            {/* {authenticated > 0 && <SignOutButton />} */}
+            {authenticated && <SignOutButton />}
           </div>
         </Paper>
       </Grid>

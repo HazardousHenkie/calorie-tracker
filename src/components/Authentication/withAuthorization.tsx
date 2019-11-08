@@ -41,6 +41,5 @@ const withAuthorization = <Props extends object>(
       )
     }
   }
-// return withFirebase(WithAuthorization)
 
 export default withAuthorization

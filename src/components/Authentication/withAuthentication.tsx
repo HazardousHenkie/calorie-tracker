@@ -1,55 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
 import AuthUserContext from './context'
 import { addUser } from '../../Redux/Actions'
 
-import Firebase from '../Firebase'
+import { withFirebase } from '../Firebase'
 
 interface ReduxProvider {
   userId: string
   loggedIn: boolean
 }
 
-export interface FirebaseInterface {
-  firebase: Firebase
-}
-
 const withAuthentication = <Props extends object>(
   Component: React.ComponentType<Props>
-): React.ComponentType<Props & FirebaseInterface> =>
-  class WithAuthentication extends React.Component<Props & FirebaseInterface> {
-    private listener: (() => void) | null = null
+) => {
+  const WithAuthentication = (props: any) => {
+    const { firebase } = props
+    const dispatch = useDispatch()
+    const [authenticated, setAuthenticated] = useState(false)
+    const { userId, loggedIn } = useSelector(
+      (state: Record<string, ReduxProvider>) => state.user
+    )
 
-    render(): React.ReactNode {
-      const { firebase, ...props } = this.props
-      const dispatch = useDispatch()
-      const [authenticated, setAuthenticated] = useState(false)
-      const { userId, loggedIn } = useSelector(
-        (state: Record<string, ReduxProvider>) => state.user
-      )
-
-      useEffect(() => {
-        const listener = firebase.auth.onAuthStateChanged(authUser => {
+    useEffect(() => {
+      const listener = firebase.auth.onAuthStateChanged(
+        (authUser: Record<string, any>) => {
           if (authUser) {
             if (!loggedIn) {
-              firebase.user(userId).once('value', snapshot => {
-                dispatch(
-                  addUser({
-                    loggedIn: true,
-                    userName: snapshot.val().username,
-                    userDescription:
-                      snapshot.val().description !== null
-                        ? snapshot.val().description
-                        : '',
-                    countries:
-                      snapshot.val().countries !== undefined
-                        ? snapshot.val().countries
-                        : null,
-                    userId: authUser.uid
-                  })
-                )
-              })
+              dispatch(
+                addUser({
+                  loggedIn: true,
+                  userName: authUser.displayName,
+                  userId: authUser.uid
+                })
+              )
             }
 
             setAuthenticated(true)
@@ -58,28 +41,27 @@ const withAuthentication = <Props extends object>(
               addUser({
                 loggedIn: false,
                 userName: '',
-                userDescription: '',
-                userId: '',
-                countries: []
+                userId: ''
               })
             )
 
             setAuthenticated(false)
           }
-        })
-
-        return (): void => {
-          listener()
         }
-      }, [setAuthenticated, firebase, dispatch, loggedIn, userId])
-      return (
-        <AuthUserContext.Provider value={authenticated}>
-          <Component {...(props as Props)} />
-        </AuthUserContext.Provider>
       )
-    }
+
+      return (): void => {
+        listener()
+      }
+    }, [setAuthenticated, firebase, dispatch, loggedIn, userId])
+    return (
+      <AuthUserContext.Provider value={authenticated}>
+        <Component {...(props as Props)} />
+      </AuthUserContext.Provider>
+    )
   }
 
-// return withFirebase(WithAuthentication)
+  return withFirebase(WithAuthentication)
+}
 
 export default withAuthentication

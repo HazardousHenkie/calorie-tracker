@@ -42,7 +42,7 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions)
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 
@@ -156,7 +156,7 @@ export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
         firebase.auth.currentUser
           .delete()
           .then(() => {
-            dispatch(addUser({ loggedin: false, userName: '', userId: '' }))
+            dispatch(addUser({ loggedIn: false, userName: '', userId: '' }))
             setSnackbarState({
               message: 'Account was deleted!',
               variant: 'error'

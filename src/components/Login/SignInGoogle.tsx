@@ -11,8 +11,6 @@ import history from '../../Helpers/History'
 import Firebase, { withFirebase } from '../Firebase'
 import useSnackbarContext from '../Snackbar/Context'
 
-import './SignInGoogle.scss'
-
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1)
@@ -22,10 +20,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
-
 const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
   const classes = useStyles()
   const { setSnackbarState } = useSnackbarContext()
@@ -44,7 +41,7 @@ const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
           signInResult.additionalUserInfo.isNewUser
         ) {
           firebase.user(signInResult.user.uid).set({
-            username: signInResult.user.displayName,
+            userName: signInResult.user.displayName,
             email: signInResult.user.email
           })
 

@@ -6,17 +6,17 @@ import App from './App'
 
 import * as serviceWorker from './serviceWorker'
 
-import { Router } from 'react-router-dom'
-import history from './Helpers/History'
+import { Provider } from 'react-redux'
+import { store } from './Redux/Store'
 
 import Firebase, { FirebaseContext } from './components/Firebase'
 
 ReactDOM.render(
-  <Router history={history}>
+  <Provider store={store}>
     <FirebaseContext.Provider value={new Firebase()}>
       <App />
     </FirebaseContext.Provider>
-  </Router>,
+  </Provider>,
   document.getElementById('root')
 )
 

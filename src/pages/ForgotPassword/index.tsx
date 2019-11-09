@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
-import SignUpEmail from '../../components/SignUp/SignUpEmail'
+import ForgotPassword from '../../components/ForgotPassword'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignUp = () => {
+const ForgotPasswordPage: React.FC = () => {
   const classes = useStyles()
 
   return (
@@ -21,7 +21,7 @@ const SignUp = () => {
         <div className="sign_up">
           <div className="sign_up__form">
             <Paper className={`${classes.root} center-content`}>
-              <SignUpEmail />
+              {/* <ForgotPassword /> */}
             </Paper>
           </div>
         </div>
@@ -30,4 +30,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default ForgotPasswordPage

@@ -7,7 +7,7 @@ import history from '../../Helpers/History'
 
 import * as routes from '../../constants/routes'
 
-export interface FirebaseInterface {
+interface FirebaseInterface {
   firebase: Firebase
 }
 
@@ -41,6 +41,5 @@ const withAuthorization = <Props extends object>(
       )
     }
   }
-// return withFirebase(WithAuthorization)
 
 export default withAuthorization

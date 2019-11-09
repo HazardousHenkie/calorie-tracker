@@ -24,8 +24,14 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const LogOut = () => {
-  const authenticated = useSelector(state => state.user.loggedIn)
+interface ReduxProvider {
+  loggedIn: boolean
+}
+
+const LogOut: React.FC = () => {
+  const authenticated = useSelector(
+    (state: Record<string, ReduxProvider>) => state.user.loggedIn
+  )
   const classes = useStyles()
 
   return (
@@ -46,7 +52,7 @@ const LogOut = () => {
               Are you sure you want to logout?
             </Typography>
 
-            {authenticated > 0 && <SignOutButton />}
+            {authenticated && <SignOutButton />}
           </div>
         </Paper>
       </Grid>

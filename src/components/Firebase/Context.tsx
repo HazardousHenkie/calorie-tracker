@@ -1,16 +1,35 @@
 import React from 'react'
+import Firebase from './Firebase'
 
 const FirebaseContext = React.createContext({})
 
-export const withFirebase = <Props extends object>(
-  Component: React.ComponentType<Props>
-): React.ComponentType<Props> =>
-  class WithFirebase extends React.Component<Props> {
+type FirebaseProviderProps = {
+  firebase: Firebase
+}
+
+export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
+  firebase,
+  children
+}) => (
+  <FirebaseContext.Provider value={firebase}>
+    {children}
+  </FirebaseContext.Provider>
+)
+
+type WithFirebaseProps = {
+  firebase: Firebase
+}
+
+// check if we can fix the annotation
+export const withFirebase = <P extends object>(
+  Component: React.ComponentType<P>
+) =>
+  class WithFirebase extends React.Component<Omit<P, keyof WithFirebaseProps>> {
     render(): React.ReactNode {
       return (
         <FirebaseContext.Consumer>
           {(firebase): React.ReactNode => (
-            <Component {...this.props} firebase={firebase} />
+            <Component {...(this.props as P)} firebase={firebase} />
           )}
         </FirebaseContext.Consumer>
       )

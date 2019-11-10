@@ -8,7 +8,7 @@ import * as routes from '../../constants/routes'
 import { addUser } from '../../Redux/Actions'
 
 import history from '../../Helpers/History'
-import Firebase, { withFirebase } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../Firebase'
 import useSnackbarContext from '../Snackbar/Context'
 
 const useStyles = makeStyles(theme => ({
@@ -20,10 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface FirebaseInterface {
-  firebase: Firebase
-}
-const SignInGoogle: React.FC<FirebaseInterface> = ({ firebase }) => {
+const SignInGoogle: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   const classes = useStyles()
   const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()

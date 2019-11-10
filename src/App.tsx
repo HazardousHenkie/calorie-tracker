@@ -1,4 +1,5 @@
 import React from 'react'
+import { compose } from 'recompose'
 
 import { Router } from 'react-router-dom'
 import Routes from './routes/Routes'
@@ -11,6 +12,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 
 import { WithAuthentication } from './components/Authentication'
+import { withSnackbar } from './components/Snackbar'
 
 let theme = createMuiTheme({
   palette: {
@@ -38,5 +40,7 @@ const App: React.FC = () => {
     </div>
   )
 }
-
-export default WithAuthentication(App)
+export default compose(
+  withSnackbar,
+  WithAuthentication
+)(App)

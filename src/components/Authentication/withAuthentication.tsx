@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import AuthUserContext from './context'
 import { addUser } from '../../Redux/Actions'
 
-import { withFirebase } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../Firebase'
 
 interface ReduxProvider {
   userId: string
@@ -13,7 +13,7 @@ interface ReduxProvider {
 const withAuthentication = <Props extends object>(
   Component: React.ComponentType<Props>
 ) => {
-  const WithAuthentication = (props: any) => {
+  const WithAuthentication: React.FC<Props & FirebaseProviderProps> = props => {
     const { firebase } = props
     const dispatch = useDispatch()
     const [authenticated, setAuthenticated] = useState(false)
@@ -22,33 +22,31 @@ const withAuthentication = <Props extends object>(
     )
 
     useEffect(() => {
-      const listener = firebase.auth.onAuthStateChanged(
-        (authUser: Record<string, any>) => {
-          if (authUser) {
-            if (!loggedIn) {
-              dispatch(
-                addUser({
-                  loggedIn: true,
-                  userName: authUser.displayName,
-                  userId: authUser.uid
-                })
-              )
-            }
-
-            setAuthenticated(true)
-          } else {
+      const listener = firebase.auth.onAuthStateChanged(authUser => {
+        if (authUser) {
+          if (!loggedIn) {
             dispatch(
               addUser({
-                loggedIn: false,
-                userName: '',
-                userId: ''
+                loggedIn: true,
+                userName: authUser.displayName ? authUser.displayName : '',
+                userId: authUser.uid
               })
             )
-
-            setAuthenticated(false)
           }
+
+          setAuthenticated(true)
+        } else {
+          dispatch(
+            addUser({
+              loggedIn: false,
+              userName: '',
+              userId: ''
+            })
+          )
+
+          setAuthenticated(false)
         }
-      )
+      })
 
       return (): void => {
         listener()

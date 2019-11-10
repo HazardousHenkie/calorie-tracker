@@ -1,34 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import useSnackbarContext, { SnackbarContext } from './Context'
+import { SnackbarContext } from './Context'
 import CustomSnackbar from './Snackbar'
-
-import Firebase from '../Firebase'
-
-interface FirebaseInterface {
-  firebase: Firebase
-}
 
 const withSnackbar = <Props extends object>(
   Component: React.ComponentType<Props>
-): React.ComponentType<Props & FirebaseInterface> =>
-  class WithSnackbar extends React.Component<Props & FirebaseInterface> {
-    render(): React.ReactNode {
-      const { snackbarState, setSnackbarState } = useSnackbarContext()
+): React.FC<Props> => {
+  const WithSnackbar: React.FC<Props> = props => {
+    const [snackbarState, setSnackbarState] = useState({
+      message: '',
+      variant: ''
+    })
 
-      return (
-        <SnackbarContext.Provider
-          value={{
-            snackbarState,
-            setSnackbarState
-          }}
-        >
-          {snackbarState.message !== '' && <CustomSnackbar />}
+    return (
+      <SnackbarContext.Provider
+        value={{
+          snackbarState,
+          setSnackbarState
+        }}
+      >
+        {snackbarState.message !== '' && <CustomSnackbar />}
 
-          <Component {...(this.props as Props)} />
-        </SnackbarContext.Provider>
-      )
-    }
+        <Component {...(props as Props)} />
+      </SnackbarContext.Provider>
+    )
   }
+
+  return WithSnackbar
+}
 
 export default withSnackbar

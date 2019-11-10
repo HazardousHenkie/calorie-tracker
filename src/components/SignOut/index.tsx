@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import Firebase, { withFirebase } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../Firebase'
 
 import { addUser } from '../../Redux/Actions'
 
@@ -18,11 +18,9 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-interface FirebaseInterface {
-  firebase: Firebase
-}
-
-export const SignOutButton: React.FC<FirebaseInterface> = ({ firebase }) => {
+export const SignOutButton: React.FC<FirebaseProviderProps> = ({
+  firebase
+}) => {
   const dispatch = useDispatch()
   const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()

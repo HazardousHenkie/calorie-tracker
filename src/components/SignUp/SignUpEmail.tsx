@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import { addUser } from '../../Redux/Actions'
 import * as routes from '../../constants/routes'
 import history from '../../Helpers/History'
-import Firebase, { withFirebase } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../Firebase'
 
 import useSnackbarContext from '../Snackbar/Context'
 
@@ -44,11 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface FirebaseInterface {
-  firebase: Firebase
-}
-
-export const SignUpForm: React.FC<FirebaseInterface> = ({ firebase }) => {
+export const SignUpForm: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
   const classes = useStyles()

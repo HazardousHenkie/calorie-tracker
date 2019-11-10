@@ -13,7 +13,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
 import { addUser } from '../../Redux/Actions'
-import Firebase, { withFirebase } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../Firebase'
 import useSnackbarContext from '../Snackbar/Context'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -42,15 +42,11 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions)
 
-interface FirebaseInterface {
-  firebase: Firebase
-}
-
 interface ReduxProvider {
   userId: string
 }
 
-export const CustomizedDialogs: React.FC<FirebaseInterface> = ({
+export const CustomizedDialogs: React.FC<FirebaseProviderProps> = ({
   firebase
 }) => {
   const dispatch = useDispatch()

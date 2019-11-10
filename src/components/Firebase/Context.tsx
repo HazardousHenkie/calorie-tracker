@@ -3,7 +3,7 @@ import Firebase from './Firebase'
 
 const FirebaseContext = React.createContext({})
 
-type FirebaseProviderProps = {
+export type FirebaseProviderProps = {
   firebase: Firebase
 }
 

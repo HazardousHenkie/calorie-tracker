@@ -12,9 +12,9 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
-import { addUser } from '../../Redux/Actions'
-import { withFirebase, FirebaseProviderProps } from '../Firebase'
-import useSnackbarContext from '../Snackbar/Context'
+import { addUser } from '../../redux/actions'
+import { withFirebase, FirebaseProviderProps } from '../firebase'
+import useSnackbarContext from '../snackbar/context'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -82,72 +82,6 @@ export const CustomizedDialogs: React.FC<FirebaseProviderProps> = ({
         variant: 'error'
       })
     } else {
-      firebase
-        .locations()
-        .child(userId)
-        .once('value')
-        .then(async snapshot => {
-          if (snapshot.exists()) {
-            const promises: Array<Promise<void>> = []
-
-            snapshot.forEach(element => {
-              if (element.val().downloadURL) {
-                promises.push(
-                  firebase
-                    .firebase()
-                    .storage()
-                    .refFromURL(element.val().downloadURL)
-                    .delete()
-                )
-              }
-            })
-
-            Promise.all(promises).then(() => {
-              firebase
-                .locations()
-                .child(userId)
-                .remove()
-            })
-          }
-        })
-        .catch(removeError => {
-          setSnackbarState({ message: removeError.message, variant: 'error' })
-        })
-
-      firebase
-        .messages()
-        .orderByChild('userId')
-        .equalTo(userId)
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.exists()) {
-            snapshot.forEach(element => {
-              element.ref.remove()
-            })
-          }
-        })
-        .catch(removeError => {
-          setSnackbarState({ message: removeError.message, variant: 'error' })
-        })
-      firebase
-        .user(userId)
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.exists() && snapshot.val().downloadURL) {
-            firebase
-              .firebase()
-              .storage()
-              .refFromURL(snapshot.val().downloadURL)
-              .delete()
-          }
-        })
-        .then(() => {
-          firebase.user(userId).remove()
-        })
-        .catch(removeError => {
-          setSnackbarState({ message: removeError.message, variant: 'error' })
-        })
-
       if (firebase.auth.currentUser) {
         firebase.auth.currentUser
           .delete()

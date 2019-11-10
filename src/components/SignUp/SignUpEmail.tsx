@@ -10,12 +10,12 @@ import Button from '@material-ui/core/Button'
 import Email from '@material-ui/icons/Email'
 import Typography from '@material-ui/core/Typography'
 
-import { addUser } from '../../Redux/Actions'
+import { addUser } from '../../redux/actions'
 import * as routes from '../../constants/routes'
-import history from '../../Helpers/History'
-import { withFirebase, FirebaseProviderProps } from '../Firebase'
+import history from '../../helpers/history'
+import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import useSnackbarContext from '../Snackbar/Context'
+import useSnackbarContext from '../snackbar/context'
 
 const SignupScheme = Yup.object().shape({
   username: Yup.string().required('Required'),

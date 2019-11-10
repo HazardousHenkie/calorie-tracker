@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import AuthUserContext from './context'
-import { addUser } from '../../Redux/Actions'
+import { addUser } from '../../redux/actions'
 
-import { withFirebase, FirebaseProviderProps } from '../Firebase'
+import { withFirebase, FirebaseProviderProps } from '../firebase'
 
 interface ReduxProvider {
   userId: string

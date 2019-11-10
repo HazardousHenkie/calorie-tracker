@@ -7,9 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { useSelector } from 'react-redux'
 
-import SignOutButton from '../../components/SignOut'
-
-import './LogOut.scss'
+import SignOutButton from '../../components/signOut'
 
 const useStyles = makeStyles(theme => ({
   rootPaper: {

@@ -1,5 +1,5 @@
-import FirebaseContext, { withFirebase, FirebaseProviderProps } from './Context'
-import Firebase from './Firebase'
+import FirebaseContext, { withFirebase, FirebaseProviderProps } from './context'
+import Firebase from './firebase'
 
 export default Firebase
 

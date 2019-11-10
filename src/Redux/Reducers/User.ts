@@ -1,4 +1,4 @@
-import { ADD_USER, UPDATE_USER } from '../ActionTypes'
+import { ADD_USER, UPDATE_USER } from '../actionTypes'
 
 const initialState = {
   loggedIn: false,

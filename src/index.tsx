@@ -7,15 +7,18 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 import { Provider } from 'react-redux'
-import { store } from './Redux/Store'
+import { store, persistor } from './Redux/Store'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import Firebase, { FirebaseContext } from './components/Firebase'
 
 ReactDOM.render(
   <Provider store={store}>
-    <FirebaseContext.Provider value={new Firebase()}>
-      <App />
-    </FirebaseContext.Provider>
+    <PersistGate loading={null} persistor={persistor}>
+      <FirebaseContext.Provider value={new Firebase()}>
+        <App />
+      </FirebaseContext.Provider>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 )

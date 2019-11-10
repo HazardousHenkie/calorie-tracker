@@ -5,11 +5,11 @@ import Button from '@material-ui/core/Button'
 import Group from '@material-ui/icons/Group'
 import { makeStyles } from '@material-ui/core/styles'
 import * as routes from '../../constants/routes'
-import { addUser } from '../../Redux/Actions'
+import { addUser } from '../../redux/actions'
 
-import history from '../../Helpers/History'
-import { withFirebase, FirebaseProviderProps } from '../Firebase'
-import useSnackbarContext from '../Snackbar/Context'
+import history from '../../helpers/history'
+import { withFirebase, FirebaseProviderProps } from '../firebase'
+import useSnackbarContext from '../snackbar/context'
 
 const useStyles = makeStyles(theme => ({
   button: {

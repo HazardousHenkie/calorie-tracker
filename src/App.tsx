@@ -2,8 +2,8 @@ import React from 'react'
 import { compose } from 'recompose'
 
 import { Router } from 'react-router-dom'
-import Routes from './routes/Routes'
-import history from './Helpers/History'
+import Routes from './routes/routes'
+import history from './helpers/history'
 
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -11,8 +11,8 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 
-import { WithAuthentication } from './components/Authentication'
-import { withSnackbar } from './components/Snackbar'
+import { WithAuthentication } from './components/authentication'
+import { withSnackbar } from './components/snackbar'
 
 let theme = createMuiTheme({
   palette: {

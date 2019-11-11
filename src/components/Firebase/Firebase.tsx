@@ -67,6 +67,9 @@ class Firebase {
 
   doSignOut = (): Promise<void> => this.auth.signOut()
 
+  getImagesStorage = (): firebase.storage.Reference =>
+    firebase.storage().ref('images')
+
   // user = (uid?: string): firebase.database.Reference =>
   //   this.db.ref(`users/${uid}`)
 

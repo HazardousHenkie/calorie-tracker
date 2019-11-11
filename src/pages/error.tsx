@@ -16,4 +16,4 @@ const Error: React.FC = () => {
   )
 }
 
-export default Error
+export default React.memo(Error)

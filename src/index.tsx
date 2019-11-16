@@ -6,7 +6,7 @@ import App from './app'
 
 import * as serviceWorker from './serviceWorker'
 
-import { Provider } from './pages/logOut/node_modules/react-redux'
+import { Provider } from 'react-redux'
 import { store, persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 

@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import * as Yup from 'yup'
 
-import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
+import { useDispatch } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Email from '@material-ui/icons/Email'

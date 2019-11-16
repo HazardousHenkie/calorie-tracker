@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
+import { useDispatch } from 'react-redux'
 
 import Button from '@material-ui/core/Button'
 import Group from '@material-ui/icons/Group'

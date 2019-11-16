@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { useSelector } from '../logOut/node_modules/react-redux'
+import { useSelector } from 'react-redux'
 import SignInGoogle from '../../components/login/signInGoogle'
 import SignInEmail from '../../components/login/signInEmail'
 

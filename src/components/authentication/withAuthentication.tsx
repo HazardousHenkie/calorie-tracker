@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from '../../pages/logOut/node_modules/react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import AuthUserContext from './context'
 import { addUser } from '../../redux/actions'
 

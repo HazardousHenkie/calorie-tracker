@@ -1,8 +1,8 @@
-import React from './node_modules/react'
-import Grid from './node_modules/@material-ui/core/Grid'
+import React from 'react'
+import Grid from '@material-ui/core/Grid'
 
-import Paper from './node_modules/@material-ui/core/Paper'
-import { makeStyles } from './node_modules/@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@material-ui/core/styles'
 
 import ForgotPassword from '../../components/forgotPassword'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
+import { useDispatch } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { withFirebase, FirebaseProviderProps } from '../firebase'

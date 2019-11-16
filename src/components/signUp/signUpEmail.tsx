@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { Link } from 'react-router-dom'
-
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import * as Yup from 'yup'
@@ -12,20 +10,24 @@ import Button from '@material-ui/core/Button'
 import Email from '@material-ui/icons/Email'
 import Typography from '@material-ui/core/Typography'
 
-import { addUser } from '../../Redux1/actions'
+import { addUser } from '../../redux/actions'
 import * as routes from '../../constants/routes'
 import history from '../../helpers/history'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import useSnackbarContext from '../Snackbar1/context'
+import useSnackbarContext from '../snackbar/context'
 
 const SignupScheme = Yup.object().shape({
+  username: Yup.string().required('Required'),
   email: Yup.string()
     .required('Required')
     .email(),
   password: Yup.string()
     .required('Required')
-    .min(6)
+    .min(6),
+  passwordConfirmation: Yup.string()
+    .required('Required')
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
 })
 
 const useStyles = makeStyles(theme => ({
@@ -42,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SignUpForm: React.FC<FirebaseProviderProps> = ({ firebase }) => {
+export const SignUpForm: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   const { setSnackbarState } = useSnackbarContext()
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -50,67 +52,62 @@ const SignUpForm: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   return (
     <div className="signup_form">
       <Typography variant="h5" component="h2" className={classes.title}>
-        Sign In
+        Sign Up
       </Typography>
-
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          passwordConfirmation: ''
+        }}
         validationSchema={SignupScheme}
-        onSubmit={async (values, { setSubmitting }): Promise<void> => {
-          const { email, password } = values
+        onSubmit={(values, { setSubmitting }): void => {
+          const { username, email, password } = values
 
           firebase
-            .doSignInWithEmailAndPassword(email, password)
-            .then(async signInResult => {
-              if (
-                signInResult.user &&
-                signInResult.additionalUserInfo &&
-                signInResult.additionalUserInfo.isNewUser
-              ) {
+            .doCreateUserWithEmailAndPassword(email, password)
+            .then(async emailAuthUser => {
+              if (emailAuthUser.user && emailAuthUser.user.uid) {
                 dispatch(
                   addUser({
                     loggedIn: true,
-                    userName: signInResult.user.displayName
-                      ? signInResult.user.displayName
-                      : '',
-                    userId: signInResult.user.uid
+                    userName: username,
+                    userId: emailAuthUser.user.uid
                   })
                 )
-              } else {
-                if (signInResult.user) {
-                  dispatch(
-                    addUser({
-                      loggedIn: true,
-                      userName: signInResult.user.displayName
-                        ? signInResult.user.displayName
-                        : '',
-                      userId: signInResult.user ? signInResult.user.uid : ''
-                    })
-                  )
-                }
               }
 
               setSubmitting(false)
               setSnackbarState({ message: 'Logged in!', variant: 'success' })
               history.push(routes.home)
             })
-            .catch(error => {
-              const { message } = error
+            .catch((error: Record<string, string>) => {
               setSubmitting(false)
-              setSnackbarState({ message, variant: 'error' })
-              history.push(routes.home)
+              setSnackbarState({ message: error.message, variant: 'error' })
             })
         }}
       >
-        {({ isSubmitting, isValid }): React.ReactNode => (
+        {({ isSubmitting }): React.ReactNode => (
           <Form>
+            <Field
+              type="text"
+              name="username"
+              component={TextField}
+              className={classes.textField}
+              id="username"
+              label="Username"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+            />
             <Field
               type="text"
               name="email"
               component={TextField}
-              id="email"
-              label="E-mail"
               className={classes.textField}
+              id="name"
+              label="E-mail"
               variant="outlined"
               margin="normal"
               fullWidth
@@ -119,39 +116,37 @@ const SignUpForm: React.FC<FirebaseProviderProps> = ({ firebase }) => {
               type="password"
               name="password"
               component={TextField}
+              className={classes.textField}
               id="password"
               label="Password"
-              className={classes.textField}
               variant="outlined"
               margin="normal"
               fullWidth
             />
-            <p className="signup_form__password_link">
-              Forgot your Password?
-              <Link to={routes.forgotPassword} className="signup_form__link">
-                Reset it!
-              </Link>
-            </p>
+            <Field
+              type="password"
+              name="passwordConfirmation"
+              component={TextField}
+              className={classes.textField}
+              id="passwordConfirmation"
+              label="Confirm Password"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+            />
 
             <Button
               type="submit"
               variant="contained"
               color="secondary"
-              disabled={isSubmitting || !isValid}
+              disabled={isSubmitting}
             >
               <Email className={classes.leftIcon} />
-              Sign In
+              Sign Up
             </Button>
           </Form>
         )}
       </Formik>
-
-      <p>
-        Don&apos;t have an account?
-        <Link to={routes.signUp} className="signup_form__link">
-          Sign Up
-        </Link>
-      </p>
     </div>
   )
 }

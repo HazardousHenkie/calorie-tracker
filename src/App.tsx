@@ -12,7 +12,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 
 import { WithAuthentication } from './components/Authentication1'
-import { withSnackbar } from './components/Snackbar1'
+import { withSnackbar } from './components/snackbar'
 
 let theme = createMuiTheme({
   palette: {

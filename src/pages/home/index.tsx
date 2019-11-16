@@ -6,8 +6,8 @@ import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useSelector } from 'react-redux'
-import SignInGoogle from '../../components/login1/signInGoogle'
-import SignInEmail from '../../components/login1/signInEmail'
+import SignInGoogle from '../../components/login/signInGoogle'
+import SignInEmail from '../../components/login/signInEmail'
 
 const useStyles = makeStyles(theme => ({
   root: {

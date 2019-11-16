@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom'
 
 import * as routes from '../constants/routes'
 
-import Home from '../pages/Home1'
-import LogOut from '../pages/LogOut1'
+import Home from '../pages/home'
+import LogOut from '../pages/logOut'
 import ForgotPassword from '../pages/forgotPassword'
-import SignUp from '../pages/signUp1'
+import SignUp from '../pages/signUp'
 import Error from '../pages/error'
 
 const Routes: React.FC = () => {

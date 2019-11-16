@@ -1,15 +1,15 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
 
 import Button from '@material-ui/core/Button'
 import Group from '@material-ui/icons/Group'
 import { makeStyles } from '@material-ui/core/styles'
 import * as routes from '../../constants/routes'
-import { addUser } from '../../Redux1/actions'
+import { addUser } from '../../redux/actions'
 
 import history from '../../helpers/history'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
-import useSnackbarContext from '../Snackbar1/context'
+import useSnackbarContext from '../snackbar/context'
 
 const useStyles = makeStyles(theme => ({
   button: {

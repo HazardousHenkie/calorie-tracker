@@ -13,7 +13,7 @@ import * as routes from '../../constants/routes'
 import history from '../../helpers/history'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import useSnackbarContext from '../Snackbar1/context'
+import useSnackbarContext from '../snackbar/context'
 
 const SignupScheme = Yup.object().shape({
   email: Yup.string()

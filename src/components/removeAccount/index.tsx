@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
 
 import { withStyles, Theme, makeStyles } from '@material-ui/core/styles'
 
@@ -12,9 +12,9 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
-import { addUser } from '../../Redux1/actions'
+import { addUser } from '../../redux/actions'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
-import useSnackbarContext from '../Snackbar1/context'
+import useSnackbarContext from '../snackbar/context'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

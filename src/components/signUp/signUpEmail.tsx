@@ -4,18 +4,18 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import * as Yup from 'yup'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../pages/logOut/node_modules/react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Email from '@material-ui/icons/Email'
 import Typography from '@material-ui/core/Typography'
 
-import { addUser } from '../../Redux1/actions'
+import { addUser } from '../../redux/actions'
 import * as routes from '../../constants/routes'
 import history from '../../helpers/history'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import useSnackbarContext from '../Snackbar1/context'
+import useSnackbarContext from '../snackbar/context'
 
 const SignupScheme = Yup.object().shape({
   username: Yup.string().required('Required'),

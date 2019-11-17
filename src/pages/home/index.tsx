@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 import SignInGoogle from '../../components/login/signInGoogle'
 import SignInEmail from '../../components/login/signInEmail'
 
-import ImageUpload from '../../components/imageUpload/imageUpload'
+import ImageUploader from '../../components/imageUploader'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
             </div>
           )}
 
-          <ImageUpload />
+          <ImageUploader />
         </div>
       </Grid>
     </Grid>

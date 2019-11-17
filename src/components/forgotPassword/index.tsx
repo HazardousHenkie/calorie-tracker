@@ -35,9 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export const ForgotPassword: React.FC<FirebaseProviderProps> = ({
-  firebase
-}) => {
+const ForgotPassword: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   const { setSnackbarState } = useSnackbarContext()
   const classes = useStyles()
 

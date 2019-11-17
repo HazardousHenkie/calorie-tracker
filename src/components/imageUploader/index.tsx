@@ -4,7 +4,7 @@ import { withFirebase, FirebaseProviderProps } from '../firebase'
 
 import FileUploader from 'react-firebase-file-uploader'
 
-const ImageUpload: React.FC<FirebaseProviderProps> = ({ firebase }) => {
+const ImageUploader: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   const handleUploadSuccess = (filename: string): void => {
     firebase
       .getImagesStorage()
@@ -36,4 +36,4 @@ const ImageUpload: React.FC<FirebaseProviderProps> = ({ firebase }) => {
   )
 }
 
-export default withFirebase(ImageUpload)
+export default withFirebase(ImageUploader)

@@ -24,6 +24,7 @@ const Home: React.FC = () => {
   const { userName, loggedIn } = useSelector(
     (state: Record<string, ReduxProvider>) => state.user
   )
+
   const classes = useStyles()
 
   return (

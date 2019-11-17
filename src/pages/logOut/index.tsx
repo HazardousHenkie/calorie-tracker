@@ -8,9 +8,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { useSelector } from 'react-redux'
 
-import SignOutButton from '../../components/SignOut1'
+import SignOutButton from '../../components/signOut'
 
-import { WithAuthorization } from '../../components/Authentication1'
+import { WithAuthorization } from '../../components/authentication'
 
 const useStyles = makeStyles(theme => ({
   rootPaper: {
@@ -33,6 +33,7 @@ const LogOut: React.FC = () => {
   const authenticated = useSelector(
     (state: Record<string, ReduxProvider>) => state.user.loggedIn
   )
+
   const classes = useStyles()
 
   return (

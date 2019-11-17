@@ -71,9 +71,9 @@ export const CustomizedDialogs: React.FC<FirebaseProviderProps> = ({
     ) {
       lastLogin = moment(firebase.auth.currentUser.metadata.lastSignInTime)
     }
-    const currentDateMinusOneWeek = moment().subtract(1, 'minutes')
+    const currentDateMinusOneMinute = moment().subtract(1, 'minutes')
 
-    if (lastLogin && lastLogin.isBefore(currentDateMinusOneWeek)) {
+    if (lastLogin && lastLogin.isBefore(currentDateMinusOneMinute)) {
       setSnackbarState({
         message: 'To remove your account you to logout and login again.',
         variant: 'error'

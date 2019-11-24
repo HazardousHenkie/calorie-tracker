@@ -5,12 +5,12 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import { addUser } from '../../redux/Actions2'
+import { addUser } from '../../redux/actions'
 
 import * as routes from '../../constants/routes'
-import history from '../../helpers/History2'
+import history from '../../helpers/history'
 
-import useSnackbarContext from '../snackbar/Context2'
+import useSnackbarContext from '../snackbar/context'
 
 const useStyles = makeStyles(() => ({
   button: {

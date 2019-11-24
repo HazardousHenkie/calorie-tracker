@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { SnackbarContext } from './Context2'
-import CustomSnackbar from './Snackbar2'
+import { SnackbarContext } from './context'
+import CustomSnackbar from './snackbar'
 
 const withSnackbar = <Props extends object>(
   Component: React.ComponentType<Props>

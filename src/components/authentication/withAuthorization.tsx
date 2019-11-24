@@ -4,7 +4,7 @@ import AuthUserContext from './context'
 
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import history from '../../helpers/History2'
+import history from '../../helpers/history'
 
 import * as routes from '../../constants/routes'
 

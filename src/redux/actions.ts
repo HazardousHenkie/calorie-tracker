@@ -1,4 +1,4 @@
-import { ADD_USER, UPDATE_USER } from './ActionTypes2'
+import { ADD_USER, UPDATE_USER } from './actionTypes'
 
 interface UserInfoAddInterface {
   loggedIn: boolean

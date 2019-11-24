@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
-import SignUpEmail from '../../components/signUp/signUpEmail2'
+import SignUpEmail from '../../components/signUp/signUpEmail'
 
 const useStyles = makeStyles(theme => ({
   root: {

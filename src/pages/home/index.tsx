@@ -1,13 +1,16 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
 
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useSelector } from 'react-redux'
+
 import SignInGoogle from '../../components/login/signInGoogle'
 import SignInEmail from '../../components/login/signInEmail'
+
+import ImageUploader from '../../components/imageUploader'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +47,8 @@ const Home: React.FC = () => {
               </Paper>
             </div>
           )}
+
+          <ImageUploader />
         </div>
       </Grid>
     </Grid>

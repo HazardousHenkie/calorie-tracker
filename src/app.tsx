@@ -3,7 +3,7 @@ import { compose } from 'recompose'
 
 import { Router } from 'react-router-dom'
 import Routes from './routes/routes'
-import history from './helpers/history'
+import history from './helpers/History2'
 
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'

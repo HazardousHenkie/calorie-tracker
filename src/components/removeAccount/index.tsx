@@ -12,9 +12,9 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import moment from 'moment'
-import { addUser } from '../../redux/actions'
+import { addUser } from '../../redux/Actions2'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
-import useSnackbarContext from '../snackbar/context'
+import useSnackbarContext from '../snackbar/Context2'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

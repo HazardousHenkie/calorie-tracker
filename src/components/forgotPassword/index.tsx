@@ -10,10 +10,10 @@ import Email from '@material-ui/icons/Email'
 import Typography from '@material-ui/core/Typography'
 
 import * as routes from '../../constants/routes'
-import history from '../../helpers/history'
+import history from '../../helpers/History2'
 import { withFirebase, FirebaseProviderProps } from '../firebase'
 
-import useSnackbarContext from '../snackbar/context'
+import useSnackbarContext from '../snackbar/Context2'
 
 const SignupScheme = Yup.object().shape({
   email: Yup.string()

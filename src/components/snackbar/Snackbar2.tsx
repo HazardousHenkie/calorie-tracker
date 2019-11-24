@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import clsx from 'clsx'
 
-import useSnackbarContext from './context'
+import useSnackbarContext from './Context2'
 
 const useStyles = makeStyles(theme => ({
   success: {

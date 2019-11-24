@@ -7,8 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { useSelector } from 'react-redux'
 
-import SignInGoogle from '../../components/login/signInGoogle'
-import SignInEmail from '../../components/login/signInEmail'
+import SignInGoogle from '../../components/login/SignInGoogle2'
+import SignInEmail from '../../components/login/SignInEma2il'
 
 import ImageUploader from '../../components/imageUploader'
 

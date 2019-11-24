@@ -33,6 +33,7 @@ const LogOut: React.FC = () => {
   const authenticated = useSelector(
     (state: Record<string, ReduxProvider>) => state.user.loggedIn
   )
+
   const classes = useStyles()
 
   return (
